@@ -13,7 +13,7 @@ struct Node {
     Node *left, *right;
 
     Node() = default;
-    Node(const T& info) : info(info), left(NULL), right(NULL) {};
+    Node(const T& info) : info(info), left(nullptr), right(nullptr) {};
 };
 
 template <typename T>
@@ -24,7 +24,7 @@ private:
     vector<T> Sorted;
 
     void _insert(Node *&root, const T& info) {
-        if (root == NULL) {
+        if (root == nullptr) {
             root = new Node(info);
             return;
         }
@@ -37,7 +37,7 @@ private:
     }
 
     bool _find(Node *root, const T& info) {
-        if (root == NULL)
+        if (root == nullptr)
             return false;
 
         if (root->info == info)
@@ -50,36 +50,30 @@ private:
         }
     }
 
-    void _delete(Node *root) {
-        if (root == NULL) {
+    void _delete(Node *now) {
+        if (now == nullptr) {
             return;
         }
 
-        if (root->left == NULL && root->right == NULL) {
-            delete root;
-            return;
-        }
+        _delete(now->left);
+        _delete(now->right);
 
-        if (root->left != NULL) {
-            _delete(root->left);
-        }
-        if (root->right != NULL) {
-            _delete(root->right);
-        }
+        delete now;
     }
 
-    void _copy(Node *root) {
-        this->insert(root->info);
-        if (root->left != NULL) {
-            _copy(root->left);
+    Node* _copy(Node *root) {
+        if (root == nullptr) {
+            return nullptr;
         }
-        if (root->right != NULL) {
-            _copy(root->right);
-        }
+        Node *now = new Node(root->info);
+        now->left = _copy(root->left);
+        now->right = _copy(root->right);
+
+        return now;
     }
 
     void _inOrder(Node *root) {
-        if (root != NULL) {
+        if (root != nullptr) {
             _inOrder(root->left);
             Sorted.push_back(root->info);
             _inOrder(root->right);
@@ -88,7 +82,7 @@ private:
 
 public:
     BinaryTree() {
-        root = NULL;
+        root = nullptr;
     }
 
     ~BinaryTree() {
@@ -96,8 +90,7 @@ public:
     }
 
     BinaryTree(const BinaryTree& other) {
-        _delete(root);
-        _copy(other.root);
+        root = _copy(other.root);
     }
 
     void insert(const T& info) {
