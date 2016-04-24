@@ -5,13 +5,13 @@
 #ifndef GRAFURI_BINARYTREE_H
 #define GRAFURI_BINARYTREE_H
 
+#include <vector>
+
 template <typename T>
-class Node {
-private:
+struct Node {
     T info;
     Node *left, *right;
 
-public:
     Node() = default;
     Node(const T& info) : info(info), left(NULL), right(NULL) {};
 };
@@ -19,7 +19,9 @@ public:
 template <typename T>
 class BinaryTree {
 private:
+    using Node = Node<T>;
     Node *root;
+    vector<T> Sorted;
 
     void _insert(Node *&root, const T& info) {
         if (root == NULL) {
@@ -66,6 +68,24 @@ private:
         }
     }
 
+    void _copy(Node *root) {
+        this->insert(root->info);
+        if (root->left != NULL) {
+            _copy(root->left);
+        }
+        if (root->right != NULL) {
+            _copy(root->right);
+        }
+    }
+
+    void _inOrder(Node *root) {
+        if (root != NULL) {
+            _inOrder(root->left);
+            Sorted.push_back(root->info);
+            _inOrder(root->right);
+        }
+    }
+
 public:
     BinaryTree() {
         root = NULL;
@@ -75,12 +95,23 @@ public:
         _delete(root);
     }
 
+    BinaryTree(const BinaryTree& other) {
+        _delete(root);
+        _copy(other.root);
+    }
+
     void insert(const T& info) {
         _insert(root, info);
     }
 
     bool find(const T& info) {
         return _find(root, info);
+    }
+
+    vector<T> inOrder() {
+        Sorted.clear();
+        _inOrder(root);
+        return Sorted;
     }
 };
 
