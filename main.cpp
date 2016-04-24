@@ -5,6 +5,26 @@
 using namespace std;
 
 int main() {
+    Graph<int> G;
+    G.addEdge(1, 2);
+    G.addEdge(2, 5);
+    G.addEdge(1, 3);
+    G.addEdge(4, 6);
+    G.addEdge(2, 6);
+    G.addEdge(5, 4);
+    G.addEdge(3, 7);
+
+    vector<int> V = G.DFS(1);
+    for (auto it : V) {
+        cout << it << " ";
+    }
+    cout << "\n";
+    V = G.BFS(1);
+    for (auto it : V) {
+        cout << it << " ";
+    }
+    cout << "\n";
+
     BinaryTree<int> B;
 
     B.insert(1);
@@ -17,7 +37,7 @@ int main() {
     B.insert(2);
     cout << B.find(12) << " " << B.find(1) << " " << B.find(6) << " " << B.find(213) << "\n";
 
-    vector<int> V = B.inOrder();
+    V = B.inOrder();
     for (auto it : V) {
         cout << it << " ";
     }
